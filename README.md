@@ -8,7 +8,7 @@ Turn an older Android phone into an offline baby monitor. Termux hosts local pag
 
 Install **Termux from a trusted official source**, preferably [F-Droid](https://f-droid.org/packages/com.termux/) or [official GitHub releases](https://github.com/termux/termux-app/releases). No Termux:API/Boot or native camera app is needed. Initial dependency installation needs internet access.
 
-When a verified GitHub Release is published, download `lan-baby-monitor-v0.1.0-rc.1-termux.sh` and `SHA256SUMS` from that release. Source ZIPs are not installation packages. Place the installer in Termux's home directory, then run:
+Download `lan-baby-monitor-v0.1.0-rc.1-termux.sh` and `SHA256SUMS` from the [verified prerelease](https://github.com/dimkabuki/lan-baby-monitor/releases/tag/v0.1.0-rc.1). Source ZIPs are not installation packages. Place the installer in Termux's home directory, then run:
 
 ```sh
 bash lan-baby-monitor-v0.1.0-rc.1-termux.sh
@@ -48,7 +48,7 @@ babycam uninstall --yes
 
 `stop` stops the server, not Android Wi-Fi. Camera **Stop Camera** releases capture while the server stays running. **Restart Camera** reacquires capture. Browser **Restart Server** restarts the HTTP worker and reconnects signaling; **Stop Server** stops capture and intentionally stops the supervisor. Monitors cannot invoke lifecycle controls.
 
-`babycam update` explicitly checks `dimkabuki/lan-baby-monitor` releases, verifies the downloaded installer checksum, and installs through the same staged path. It can select a newer release candidate. It stops an active server; run `babycam start` after upgrading. It fails cleanly if no release/source is available. Successful network updates cannot be verified before a release exists. Uninstall preserves config/logs and Termux runtime packages.
+`babycam update` explicitly checks `dimkabuki/lan-baby-monitor` releases, verifies the downloaded installer checksum, and installs through the same staged path. It can select a newer release candidate. It stops an active server; run `babycam start` after upgrading. It fails cleanly if no release/source is available. A complete update on real Termux remains unverified. Uninstall preserves config/logs and Termux runtime packages.
 
 ## Android and network setup
 
