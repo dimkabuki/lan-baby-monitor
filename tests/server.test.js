@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import os from "node:os";
 
 import { once } from "node:events";
 import { randomUUID } from "node:crypto";
@@ -144,7 +145,18 @@ test("loopback, Host, Origin and CSRF enforcement; forwarded headers ignored", a
     managementAllowed(request, app.port, app.status().network, token),
     false,
   );
-  const address = process.env.BABYCAM_TEST_LAN_IP;
+  let address = process.env.BABYCAM_TEST_LAN_IP;
+  if (!address) {
+    try {
+      address = Object.values(os.networkInterfaces())
+        .flat()
+        .find((n) => !n.internal && n.family === "IPv4")?.address;
+    } catch {
+      t.diagnostic(
+        "Physical LAN management rejection unavailable in this restricted environment; socket-address unit policy still checked.",
+      );
+    }
+  }
   if (address) {
     const lan = `http://${address}:${app.port}`;
     assert.equal((await fetch(lan + "/camera")).status, 403);

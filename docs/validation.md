@@ -11,17 +11,19 @@
 
 ## Important test environment distinction
 
-This environment blocks network interface enumeration and non-loopback local connections. Browser media tests therefore used `BABYCAM_E2E_LOOPBACK=1`, localhost HTTP, a test-only loopback ICE flag and disabled mDNS IP masking. Real RTP/DTLS/WebRTC was used; media was not mocked or relayed. This proves the application's browser media path on loopback. It does **not** prove insecure LAN-origin behavior, default mDNS ICE or physical Wi-Fi recovery. The default CI browser suite uses an actual Linux LAN IPv4 HTTP origin with no loopback/mDNS overrides and asserts the monitor origin is insecure. That default run remains pending until GitHub CI can execute.
+This environment blocks network interface enumeration and non-loopback local connections. Browser media tests therefore used `BABYCAM_E2E_LOOPBACK=1`, localhost HTTP, a test-only loopback ICE flag and disabled mDNS IP masking. Real RTP/DTLS/WebRTC was used; media was not mocked or relayed. This proves the application's browser media path on loopback. It does **not** prove insecure LAN-origin behavior, default mDNS ICE or physical Wi-Fi recovery. The default CI browser suite uses an actual Linux LAN IPv4 HTTP origin with no loopback/mDNS overrides and asserts the monitor origin is insecure. The default run subsequently passed on GitHub Actions, proving the same browser media and recovery scenario on an insecure LAN HTTP origin with normal host ICE. Physical Wi-Fi and Android acceptance remain pending.
 
 The ordinary Playwright Chromium download returned an invalid archive in this environment. A separately obtained Chromium executable was used for local tests via `BABYCAM_CHROMIUM`; this test-only binary is not an application dependency or release asset.
 
-## External delivery blocked
+## GitHub delivery
 
-The connected GitHub integration verified the account `dimkabuki` and repository inventory, but exposes no operation to create repositories, administer branch protection/settings or publish release assets. No authenticated GitHub CLI was available. The target repository did not exist in the accessible inventory. No repository, remote PR, GitHub CI run, protection or Release was created or claimed. Local git contains an initial `main` bootstrap and implementation feature branches; they have not been merged into remote main.
+The public repository exists at https://github.com/dimkabuki/lan-baby-monitor. Initial bootstrap added MIT licensing, the engineering contract and minimal CI to main. The implementation is uploaded through PR #1: https://github.com/dimkabuki/lan-baby-monitor/pull/1.
 
-Prepared GitHub Actions workflows enforce `quality`, `browser`, `installer`, and re-run checks before publishing a tag/version-matched main-ancestor release. A repository configuration script sets and reads back the requested protections when administrative CLI access becomes available. No main protection or CI pass is claimed until externally verified.
+All three initial GitHub Actions checks passed: quality, browser and installer. Verified run: https://github.com/dimkabuki/lan-baby-monitor/actions/runs/38310549964 (implementation commit 0e0c6979a37c28af4b31159a967b25eef88700a3). The browser job uses an insecure LAN HTTP origin with normal host ICE and no loopback/mDNS overrides. Subsequent PR-head checks must also pass before merge; see the PR for current status.
 
-The source snapshot and candidate installer are supplied so work can resume without recreating the implementation. Publication remains blocked; no download URL is fabricated. The candidate must not be published as a tested release until the default CI browser check passes.
+The connected GitHub integration permits file, branch and PR operations but exposes no operation to administer branch protection/settings or dispatch the release workflow. No authenticated administrative GitHub CLI is available. Protection and release publishing remain pending; implementation must not bypass those requirements.
+
+Prepared workflows enforce quality, browser and installer checks and re-run them before publishing a tag/version-matched main-ancestor prerelease. The repository configuration script sets and reads back the requested protections when administrative CLI access is available. A manually triggered Release workflow creates the matching tag and uploads the verified installer, checksum and notes only after its checks pass.
 
 ## Not verified
 
