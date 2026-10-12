@@ -1,0 +1,30 @@
+{
+  "name": "lan-baby-monitor",
+  "version": "0.1.0-rc.1",
+  "private": true,
+  "type": "module",
+  "description": "Local browser-to-browser baby monitor for Termux",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node src/worker.js",
+    "test": "node --test tests/unit.test.js tests/server.test.js tests/lifecycle.test.js",
+    "test:e2e": "node --test tests/browser.test.js",
+    "test:installer": "node --test tests/installer.test.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "build": "node scripts/build.js",
+    "verify": "node scripts/verify.js"
+  },
+  "dependencies": {
+    "ws": "8.22.0"
+  },
+  "devDependencies": {
+    "eslint": "10.12.0",
+    "playwright": "1.61.1",
+    "prettier": "3.9.10"
+  }
+}

@@ -1,0 +1,166 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #101820;
+  color: #eff4f7;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 840px;
+  margin: auto;
+  padding: 14px;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+h1 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+.view {
+  position: relative;
+  background: #05090c;
+  aspect-ratio: 4/3;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.view > #placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+  background: #05090c;
+}
+.view > #placeholder[hidden] {
+  display: none;
+}
+.view > #motionEvent {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #e9b35b;
+  color: #101820;
+  padding: 8px;
+  border-radius: 6px;
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+button {
+  font: inherit;
+  background: #2c6171;
+  color: white;
+  border: 1px solid #437d90;
+  border-radius: 7px;
+  padding: 11px 14px;
+  min-height: 44px;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.danger {
+  background: #833b40;
+}
+dl {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+dt {
+  color: #a5b8c5;
+}
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+label:has(#url) {
+  display: block;
+}
+input[type="range"] {
+  flex: 1;
+  min-width: 100px;
+  accent-color: #83c3d5;
+}
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #83c3d5;
+}
+input[readonly] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  background: #172b35;
+  border: 1px solid #437d90;
+  color: #fff;
+  font-size: 1rem;
+}
+details {
+  background: #182832;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+}
+summary {
+  cursor: pointer;
+  min-height: 30px;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 0.75rem;
+}
+.note {
+  color: #a5b8c5;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+#error {
+  color: #ffb2ae;
+  white-space: pre-wrap;
+}
+.warning {
+  color: #e9c07b;
+  font-size: 0.85rem;
+}
+:fullscreen {
+  overflow: auto;
+  background: #101820;
+}
+strong[data-state="STREAMING"] {
+  color: #84d6ad;
+}
+strong[data-state="DEGRADED"],
+strong[data-state="FAILED"] {
+  color: #ffb2ae;
+}
