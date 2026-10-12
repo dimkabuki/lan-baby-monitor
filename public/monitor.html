@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LAN Baby Monitor · Monitor</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>LAN Baby Monitor</h1>
+        <strong id="connection" role="status" aria-live="polite"
+          >Connecting</strong
+        >
+      </header>
+      <div class="view">
+        <video id="video" autoplay playsinline muted></video>
+        <div id="placeholder">Connecting to camera…</div>
+        <div id="motionEvent" hidden>Motion detected</div>
+      </div>
+      <p id="error" role="alert"></p>
+      <p id="warning" class="warning">
+        Keep this tab visible. Use Android display settings to keep the screen
+        on.
+      </p>
+      <div class="controls">
+        <button id="enable">Enable Audio &amp; Alerts</button
+        ><button id="fullscreen">Fullscreen</button
+        ><button id="reconnect">Reconnect</button>
+      </div>
+      <label
+        >Volume<input id="volume" type="range" min="0" max="100" value="100"
+      /></label>
+      <dl>
+        <dt>Video health</dt>
+        <dd id="videoHealth">Waiting</dd>
+        <dt>Audio health</dt>
+        <dd id="audioHealth">Waiting</dd>
+        <dt>Audio playback / alerts</dt>
+        <dd id="playback">Tap Enable Audio & Alerts</dd>
+        <dt>Last confirmed media</dt>
+        <dd id="lastMedia">—</dd>
+      </dl>
+      <details open>
+        <summary>Motion & alerts</summary>
+        <label
+          ><input id="motion" type="checkbox" checked />Motion Detection</label
+        ><label
+          >Sensitivity<input
+            id="sensitivity"
+            type="range"
+            min="1"
+            max="100"
+            value="50"
+          /><output id="sensitivityValue">50</output></label
+        ><label
+          ><input id="notification" type="checkbox" checked />Motion
+          Notification</label
+        ><label
+          ><input id="sound" type="checkbox" checked />Audible Motion
+          Alert</label
+        ><button id="testAlert">Test Alert</button>
+        <p>Last motion: <span id="lastMotion">None</span></p>
+      </details>
+      <details>
+        <summary>Diagnostics</summary>
+        <pre id="diagnostics"></pre>
+      </details>
+      <p class="note">
+        No recording. No internet required. Anyone on this reachable trusted LAN
+        can attempt access. Alerts cannot run while Android suspends the
+        browser. This is not a certified child-safety monitor.
+      </p>
+    </main>
+    <script type="module" src="/monitor.js"></script>
+  </body>
+</html>

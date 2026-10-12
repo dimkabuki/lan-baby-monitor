@@ -1,0 +1,84 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Version tag matching package.json; tested main commit only"
+        required: true
+        type: string
+        default: "v0.1.0-rc.1"
+  push:
+    tags: ["v*"]
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    uses: ./.github/workflows/ci.yml
+  package:
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+      - name: Verify tag and main ancestry
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          node scripts/check-release.js "$RELEASE_TAG"
+          git merge-base --is-ancestor HEAD origin/main
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run build && npm run verify
+      - run: cp docs/release-notes.md dist/RELEASE-NOTES.md
+      - name: Record tested commit
+        run: git rev-parse HEAD > dist/COMMIT
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: verified-release
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    needs: package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download this run's verified artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: gh run download "$RUN_ID" --name verified-release --dir dist
+      - name: Publish immutable release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          cd dist
+          sha256sum -c SHA256SUMS
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to overwrite immutable assets.' >&2
+            exit 1
+          fi
+          commit=$(cat COMMIT)
+          [[ "$commit" =~ ^[0-9a-f]{40}$ ]]
+          if existing=$(gh api "repos/$GH_REPO/commits/$RELEASE_TAG" --jq '.sha' 2>/dev/null); then
+            [[ "$existing" == "$commit" ]] || { echo 'Tag points to another commit.' >&2; exit 1; }
+          else
+            gh api --method POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$RELEASE_TAG" -f "sha=$commit"
+          fi
+          extra=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then extra+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" ./*termux.sh SHA256SUMS RELEASE-NOTES.md --verify-tag --title "LAN Baby Monitor $RELEASE_TAG" --notes-file RELEASE-NOTES.md "${extra[@]}"

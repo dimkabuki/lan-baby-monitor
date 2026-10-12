@@ -1,0 +1,42 @@
+export default [
+  { ignores: ["node_modules/**", "dist/**", "test-results/**"] },
+  {
+    files: ["**/*.js"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: Object.fromEntries(
+        [
+          "process",
+          "console",
+          "Buffer",
+          "URL",
+          "setTimeout",
+          "clearTimeout",
+          "setInterval",
+          "clearInterval",
+          "fetch",
+          "AbortSignal",
+          "document",
+          "window",
+          "navigator",
+          "location",
+          "localStorage",
+          "WebSocket",
+          "RTCPeerConnection",
+          "MediaStream",
+          "crypto",
+          "confirm",
+          "isSecureContext",
+          "Event",
+        ].map((key) => [key, "readonly"]),
+      ),
+    },
+    rules: {
+      "no-undef": "error",
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "no-constant-condition": "error",
+      "no-unreachable": "error",
+    },
+  },
+];

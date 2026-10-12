@@ -1,0 +1,11 @@
+# Maintaining and publishing
+
+Bootstrap only the engineering contract and CI on public `main`, then configure branch protection before ordinary feature PRs. Required stable check names: `quality`, `browser`, `installer`. PR required, zero external approvals, strict up-to-date checks, admin enforcement, no force-push/deletion, resolved conversations, linear history, squash only, automatic feature-branch deletion. Run `scripts/configure-repository.sh OWNER/lan-baby-monitor` with GitHub CLI administrative access; read back protection to verify it actually applied.
+
+The implementation snapshot has local bootstrap and feature branches; no remote PR, protection, CI or release is claimed when GitHub creation/admin/publishing permissions are unavailable. Publication must use those PRs rather than silently treating the feature snapshot as protected main. See `docs/validation.md` for current execution status.
+
+Development: Node 22+ (Node 24 in CI); `npm ci --ignore-scripts`, `npx playwright install --with-deps chromium`, `npm run format:check`, `npm run lint`, `npm test`, `npm run test:e2e`, `npm run build`, `npm run verify`, `npm run test:installer`. The browser suite tests actual WebRTC against synthetic media, not a mocked media server. CI monitor origin must be non-secure HTTP. Installer tests simulate Termux's environment gate and use real extraction, integrity and application startup; no Android emulation is claimed.
+
+Release: update semantic version and release notes in a PR, run required CI, squash merge, then tag that tested main commit `vX.Y.Z[-rc.N]`, or run the Release workflow manually on main with that version tag. The manual action creates the tag only after all checks pass. The release workflow re-runs all checks, verifies tag/version and main ancestry, builds/verifies the actual installer, and publishes a checksum and notes. Separate read-only validation/package jobs from a minimal write-enabled publishing job. It refuses to overwrite existing immutable releases. Stable versions require recorded Android acceptance. Configure tag protection/rulesets for `v*` to restrict creation/update to maintainers where supported.
+
+No release credentials are used in PR workflows. External Actions are SHA-pinned. No pull_request_target workflow. Do not loosen tests to publish a failing package.

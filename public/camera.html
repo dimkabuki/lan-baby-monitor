@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LAN Baby Monitor · Camera</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>LAN Baby Monitor</h1>
+        <span>Camera</span>
+      </header>
+      <div class="view">
+        <video id="video" autoplay playsinline muted></video>
+        <div id="placeholder">
+          Press Start Camera to grant camera and microphone access.
+        </div>
+      </div>
+      <div class="controls">
+        <button id="start">Start Camera</button
+        ><button id="stop" disabled>Stop Camera</button
+        ><button id="restart" disabled>Restart Camera</button
+        ><button id="switch" disabled>Switch Front/Rear</button
+        ><button id="fullscreen">Fullscreen</button>
+      </div>
+      <p id="error" role="alert"></p>
+      <p id="warning" class="warning"></p>
+      <dl>
+        <dt>Capture</dt>
+        <dd id="capture">STOPPED</dd>
+        <dt>Permissions</dt>
+        <dd id="permission">Not requested</dd>
+        <dt>Video / audio</dt>
+        <dd id="tracks">Inactive / inactive</dd>
+        <dt>Outgoing media</dt>
+        <dd id="streaming">Not streaming</dd>
+        <dt>Resolution</dt>
+        <dd id="resolution">—</dd>
+        <dt>Connected monitors</dt>
+        <dd id="count">0/2</dd>
+        <dt>Server signaling</dt>
+        <dd id="server">Connecting</dd>
+        <dt>Wi-Fi / LAN</dt>
+        <dd id="network">Checking</dd>
+        <dt>LAN IP</dt>
+        <dd id="ip">—</dd>
+        <dt>Wake lock</dt>
+        <dd id="wake">Not acquired</dd>
+      </dl>
+      <label
+        >Monitor URL<input id="url" readonly value="Waiting for LAN address"
+      /></label>
+      <div class="controls">
+        <button id="share">Share Monitor URL</button
+        ><button id="copy">Copy Monitor URL</button>
+      </div>
+      <details>
+        <summary>Server controls & diagnostics</summary>
+        <p>
+          Restart briefly interrupts signaling. Stop leaves this page open and
+          stops the background server.
+        </p>
+        <div class="controls">
+          <button id="serverRestart">Restart Server</button
+          ><button id="serverStop" class="danger">Stop Server</button>
+        </div>
+        <pre id="diagnostics"></pre>
+      </details>
+      <p class="note">
+        Keep Chrome foregrounded, the screen on, and the phone powered. Android
+        can suspend capture or kill Termux. Foreground browser alerts are
+        informational.
+      </p>
+    </main>
+    <script type="module" src="/camera.js"></script>
+  </body>
+</html>
