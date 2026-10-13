@@ -27,6 +27,8 @@ No real Android devices were available during this implementation. Linux simulat
 | Resource observation                         | Record CPU/RAM/battery/temperature at 0, 30, 120 and 240 minutes          | Pending |
 | Charging with screens active                 | Record heat, wake-lock behavior and any Android suspension                | Pending |
 
+Also verify opening the downloaded `.sh` via Android **Open with → Termux** and **Share → Termux**, the **Open directory** import into private `~/downloads`, installation without shared-storage permission, and file-manager/default-app variations. This import path was inspected in Termux v0.118.3 source, not tested on a device; it must not be advertised as automatic execution.
+
 Also verify microphone mute/ended tracks, camera browser closure and reopening, Termux notification wake-lock behavior, battery-optimization exemptions, Chrome fullscreen controls, audio gesture before a camera connects, mDNS host ICE, and network enumeration fallback. Do not leave a device charging unattended if it shows abnormal heat or a damaged battery.
 
 Suggested record: date; phone models/Android versions; Chrome versions; Termux source/version; router; one/two monitors; real negotiated resolution; each result and observed error; four-hour metrics. Foreground alerts are never guaranteed after Android suspends a page.

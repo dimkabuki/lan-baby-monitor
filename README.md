@@ -8,7 +8,25 @@ Turn an older Android phone into an offline baby monitor. Termux hosts local pag
 
 Install **Termux from a trusted official source**, preferably [F-Droid](https://f-droid.org/packages/com.termux/) or [official GitHub releases](https://github.com/termux/termux-app/releases). No Termux:API/Boot or native camera app is needed. Initial dependency installation needs internet access.
 
-Download `lan-baby-monitor-v0.1.0-rc.1-termux.sh` and `SHA256SUMS` from the [verified prerelease](https://github.com/dimkabuki/lan-baby-monitor/releases/tag/v0.1.0-rc.1). Source ZIPs are not installation packages. Place the installer in Termux's home directory, then run:
+Download `lan-baby-monitor-v0.1.0-rc.1-termux.sh` from the [verified prerelease](https://github.com/dimkabuki/lan-baby-monitor/releases/tag/v0.1.0-rc.1). Source ZIPs are not installation packages.
+
+### Open the downloaded file with Termux
+
+1. Open the downloaded `.sh` file in Android's Downloads/file manager and select **Termux** in **Open with**. If Termux is not offered, use **Share** on the actual file and select **Termux**; sharing only the download URL is a different operation.
+2. In Termux's **Save file in ~/downloads/** dialog, keep the full original filename and select **Open directory**. This imports the file into Termux's private `~/downloads` folder and opens a terminal there.
+3. Run:
+
+```sh
+bash ~/downloads/lan-baby-monitor-v0.1.0-rc.1-termux.sh
+```
+
+This path does not require shared-storage permission. The app chooser depends on your Termux version, file manager and Android defaults; a downloaded file cannot force that choice. Opening/importing the file does not execute it. **Edit** invokes an optional `~/bin/termux-file-editor` hook, which is not configured by this project. First installation still requires the explicit bash command; no global hook that runs arbitrary shared scripts is installed.
+
+Verified against the [Termux v0.118.3 manifest](https://github.com/termux/termux-app/blob/v0.118.3/app/src/main/AndroidManifest.xml) and [file receiver source](https://github.com/termux/termux-app/blob/v0.118.3/app/src/main/java/com/termux/filepicker/TermuxFileReceiverActivity.java). Real Android opening/sharing remains untested.
+
+### Direct terminal installation
+
+Alternatively, place the installer in Termux's home directory, then run:
 
 ```sh
 bash lan-baby-monitor-v0.1.0-rc.1-termux.sh
@@ -16,7 +34,7 @@ bash lan-baby-monitor-v0.1.0-rc.1-termux.sh
 
 The one-file installer installs missing Termux runtime packages, includes the pinned `ws` dependency, verifies its payload and files, stages a version directory, and atomically switches the current symlink. It preserves configuration during repeated installs/upgrades and refuses unrelated command conflicts. You do not run npm or pip yourself. If downloaded to Android Downloads instead, grant shared-storage access with Termux's built-in `termux-setup-storage`, then run `bash ~/storage/downloads/lan-baby-monitor-v0.1.0-rc.1-termux.sh`.
 
-Independent verification (when `sha256sum` is already present):
+Independent verification: also download `SHA256SUMS`, place it beside the installer, and run from that directory (when `sha256sum` is already present):
 
 ```sh
 sha256sum -c SHA256SUMS
